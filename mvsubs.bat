@@ -149,5 +149,5 @@ if /i "%~1" == "Vietnamese" (
 exit /b 1
 
 :end
-if %ErrorLevel% NEQ 0 pause
+if %ErrorLevel% NEQ 0 (pause)
 exit /b
