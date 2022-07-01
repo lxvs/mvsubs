@@ -23,7 +23,8 @@ for /f "delims=" %%a in ('dir /b /ad') do (
         )
         if "!skip!" NEQ "1" (
             set lastlang=!lang!
-            ren "%%~b" "../%%~a.!lang!!subtype!.srt"
+            ren "%%~b" "%%~a.!lang!!subtype!.srt"
+            move "%%~a.!lang!!subtype!.srt" "..\..\" 1>nul
         )
     )
     popd
