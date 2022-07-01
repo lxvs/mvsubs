@@ -1,5 +1,6 @@
 @echo off
 setlocal EnableDelayedExpansion
+if exist "Subs\" (pushd Subs)
 for /f "delims=" %%a in ('dir /b /ad') do (
     pushd "%%~a"
     set lastlang=
@@ -30,6 +31,8 @@ for /f "delims=" %%a in ('dir /b /ad') do (
     popd
     rmdir "%%~a"
 )
+popd
+rmdir Subs
 goto end
 
 :ConvertLang
