@@ -4,10 +4,14 @@ for /f "delims=" %%a in ('dir /b /ad') do (
     pushd "%%~a"
     set lastlang=
     set subtype=
-    for /f "delims=" %%b in ('dir ?_*.srt /b /a-d') do (
+    for /f "delims=" %%b in ('dir ?_*.srt ??_*.srt /b /a-d') do (
         set "fn=%%~nb"
         set "num=!fn:~0,1!"
         set "language=!fn:~2!"
+        if "!language:~0,1!" == "_" (
+            set "num=!fn:~0,2!"
+            set "language=!fn:~3!"
+        )
         call:ConvertLang "!language!" || goto end
         if "!lastlang!" == "!lang!" (
             if "!subtype!" == "" (
