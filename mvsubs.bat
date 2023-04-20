@@ -1,5 +1,18 @@
 @echo off
 setlocal EnableDelayedExpansion
+
+if exist "Season ??" (
+    for /f "delims=" %%A in ('dir "Season ??" /b /ad') do (
+        pushd "%%~A"
+        call:move_single_season || goto end
+        popd
+    )
+) else (
+    call:move_single_season
+)
+goto end
+
+:move_single_season
 if exist "Subs\" (pushd Subs)
 for /f "delims=" %%a in ('dir /b /ad') do (
     pushd "%%~a"
@@ -40,7 +53,7 @@ for /f "delims=" %%a in ('dir /b /ad') do (
 )
 popd
 rmdir Subs
-goto end
+exit /b
 
 :end
 if %ErrorLevel% NEQ 0 (pause)
