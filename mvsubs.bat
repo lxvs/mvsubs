@@ -1,5 +1,6 @@
 @echo off
 setlocal EnableDelayedExpansion
+set needpause=
 
 if exist "Season ??" (
     for /f "delims=" %%A in ('dir "Season ??" /b /ad') do (
@@ -35,6 +36,7 @@ for /f "delims=" %%a in ('dir /b /ad') do (
                     set subtype=.Alt
                 ) else (
                     >&2 echo warning: more than 3 subtitles of !language!, skipped
+                    set needpause=1
                     set skip=1
                 )
             )
@@ -56,5 +58,6 @@ rmdir Subs
 exit /b
 
 :end
-if %ErrorLevel% NEQ 0 (pause)
+if %ErrorLevel% NEQ 0 (set needpause=1)
+if defined needpause (pause)
 exit /b
