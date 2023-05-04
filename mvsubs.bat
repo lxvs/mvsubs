@@ -1,11 +1,14 @@
 @echo off
 setlocal EnableDelayedExpansion
 set needpause=
+set trace=1
 
 if exist "Season ??" (
     for /f "delims=" %%A in ('dir "Season ??" /b /ad') do (
+        if defined trace (echo  + entering `%%~A')
         pushd "%%~A"
         call:move_single_season || goto end
+        if defined trace (echo  + leaving `%%~A')
         popd
     )
 ) else (
@@ -14,8 +17,13 @@ if exist "Season ??" (
 goto end
 
 :move_single_season
-if exist "Subs\" (pushd Subs)
+if defined trace (echo  ++ starting moving single season)
+if exist "Subs\" (
+    if defined trace (echo  ++ entering `Subs')
+    pushd Subs
+)
 for /f "delims=" %%a in ('dir /b /ad') do (
+    if defined trace (echo  +++ entering `%%~a')
     pushd "%%~a"
     set lastlang=
     set subtype=
@@ -50,14 +58,23 @@ for /f "delims=" %%a in ('dir /b /ad') do (
             move "%%~a.!language!!subtype!.srt" "..\..\" 1>nul
         )
     )
+    if defined trace (echo  +++ leaving `%%~a')
     popd
     rmdir "%%~a"
 )
+if defined trace (echo  ++ leaving `Subs')
 popd
 rmdir Subs
 exit /b
 
 :end
 if %ErrorLevel% NEQ 0 (set needpause=1)
+if defined trace (
+    if defined needpause (
+        echo finished with pause
+    ) else (
+        echo finished cleanly
+    )
+)
 if defined needpause (pause)
 exit /b
