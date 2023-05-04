@@ -60,11 +60,11 @@ for /f "delims=" %%a in ('dir /b /ad') do (
     )
     if defined trace (echo  +++ leaving `%%~a')
     popd
-    rmdir "%%~a"
+    rmdir "%%~a" || set needpause=1
 )
 if defined trace (echo  ++ leaving `Subs')
 popd
-rmdir Subs
+rmdir Subs || set needpause=1
 exit /b
 
 :end
